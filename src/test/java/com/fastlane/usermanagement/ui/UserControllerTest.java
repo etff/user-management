@@ -17,6 +17,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -65,7 +67,7 @@ class UserControllerTest {
     }
 
     @Test
-    void register_with_invalid_password() throws Exception {
+    void registerWithInvalidPassword() throws Exception {
 
         mockMvc.perform(
                         post("/api/v1/users")
@@ -100,4 +102,13 @@ class UserControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    void deleteUser() throws Exception {
+        mockMvc.perform(
+                        delete("/api/v1/users/{userId}", anyLong())
+                )
+                .andExpect(status().isNoContent());
+
+        verify(userService).deleteUser(anyLong());
+    }
 }

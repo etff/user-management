@@ -49,6 +49,11 @@ public class JdbcUserRepository implements UserRepository {
         return ofNullable(results.isEmpty() ? null : results.get(0));
     }
 
+    @Override
+    public void deleteById(Long userId) {
+        jdbcTemplate.update("DELETE FROM users WHERE id=?", userId);
+    }
+
     static RowMapper<User> mapper = (rs, rowNum) -> User.builder()
             .id(rs.getLong("id"))
             .password(rs.getString("password"))

@@ -16,7 +16,9 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -50,7 +52,7 @@ class UserServiceTest {
     }
 
     @Test
-    void get_existed_user() {
+    void getExistedUser() {
         // given
         given(userRepository.findById(Id.of(User.class, GIVEN_USER_ID)))
                 .willReturn(Optional.of(user));
@@ -63,10 +65,18 @@ class UserServiceTest {
     }
 
     @Test
-    void get_not_existed_user() {
+    void getNotExistedUser() {
         // when
         assertThatThrownBy(() -> {
             userService.getUser(GIVEN_USER_ID);
         }).isInstanceOf(UserNotFoundException.class);
+    }
+
+    @Test
+    void deleteUser() {
+        // when
+        userService.deleteUser(anyLong());
+
+        verify(userRepository).deleteById(anyLong());
     }
 }

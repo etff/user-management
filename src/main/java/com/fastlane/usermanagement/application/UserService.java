@@ -28,4 +28,8 @@ public class UserService {
                 .orElseThrow(UserNotFoundException::new);
         return new UserResponseDto(user);
     }
+
+    public void deleteUser(Long userId) {
+        userRepository.deleteById(userId);
+    }
 }
