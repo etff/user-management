@@ -2,6 +2,7 @@ package com.fastlane.usermanagement.ui;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fastlane.usermanagement.application.UserService;
+import com.fastlane.usermanagement.application.exception.UserNotFoundException;
 import com.fastlane.usermanagement.dto.UserRequestDto;
 import com.fastlane.usermanagement.dto.UserResponseDto;
 import org.junit.jupiter.api.BeforeEach;
@@ -86,6 +87,17 @@ class UserControllerTest {
                 .andExpect(content().string(
                         objectMapper.writeValueAsString(userResponseDto))
                 );
+    }
+
+    @Test
+    void getNotExistUser() throws Exception {
+        given(userService.getUser(any()))
+                .willThrow(UserNotFoundException.class);
+
+        mockMvc.perform(
+                        get("/api/v1/users/{userId}", anyLong())
+                )
+                .andExpect(status().isNotFound());
     }
 
 }
