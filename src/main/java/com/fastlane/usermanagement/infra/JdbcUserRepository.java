@@ -4,12 +4,16 @@ import com.fastlane.usermanagement.domain.User;
 import com.fastlane.usermanagement.global.model.Id;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
+import java.util.List;
 import java.util.Optional;
+
+import static java.util.Optional.ofNullable;
 
 @RequiredArgsConstructor
 @Repository
@@ -39,6 +43,14 @@ public class JdbcUserRepository implements UserRepository {
 
     @Override
     public Optional<User> findById(Id<User, Long> userId) {
-        return Optional.empty();
+        List<User> results = jdbcTemplate.query("SELECT * FROM users WHERE id=?",
+                mapper,
+                userId.value());
+        return ofNullable(results.isEmpty() ? null : results.get(0));
     }
+
+    static RowMapper<User> mapper = (rs, rowNum) -> User.builder()
+            .id(rs.getLong("id"))
+            .password(rs.getString("password"))
+            .build();
 }
