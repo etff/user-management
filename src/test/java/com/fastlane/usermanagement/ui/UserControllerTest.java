@@ -14,8 +14,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -69,6 +72,20 @@ class UserControllerTest {
                                 .content(objectMapper.writeValueAsString(failRequestDto))
                 )
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void getUser() throws Exception {
+        given(userService.getUser(any()))
+                .willReturn(userResponseDto);
+
+        mockMvc.perform(
+                        get("/api/v1/users/{userId}", anyLong())
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().string(
+                        objectMapper.writeValueAsString(userResponseDto))
+                );
     }
 
 }

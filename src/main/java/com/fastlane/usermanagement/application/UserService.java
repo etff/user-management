@@ -1,7 +1,9 @@
 package com.fastlane.usermanagement.application;
 
+import com.fastlane.usermanagement.application.exception.UserNotFoundException;
 import com.fastlane.usermanagement.domain.User;
 import com.fastlane.usermanagement.dto.UserResponseDto;
+import com.fastlane.usermanagement.global.model.Id;
 import com.fastlane.usermanagement.infra.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,5 +20,12 @@ public class UserService {
         User saved = userRepository.save(user);
 
         return new UserResponseDto(saved);
+    }
+
+    @Transactional(readOnly = true)
+    public UserResponseDto getUser(Long userId) {
+        final User user = userRepository.findById(Id.of(User.class, userId))
+                .orElseThrow(UserNotFoundException::new);
+        return new UserResponseDto(user);
     }
 }

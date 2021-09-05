@@ -2,8 +2,6 @@ package com.fastlane.usermanagement.global.model;
 
 import java.util.Objects;
 
-import static lombok.Lombok.checkNotNull;
-
 public class Id<R, V> {
 
     private final Class<R> reference;
@@ -16,9 +14,8 @@ public class Id<R, V> {
     }
 
     public static <R, V> Id<R, V> of(Class<R> reference, V value) {
-        checkNotNull(reference, "reference must be provided.");
-        checkNotNull(value, "value must be provided.");
-
+        Objects.requireNonNull(reference);
+        Objects.requireNonNull(value);
         return new Id<>(reference, value);
     }
 
