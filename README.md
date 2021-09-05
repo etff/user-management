@@ -2,7 +2,9 @@
 
 ## 실행방법
 
-- 별도의 설치는 필요하지 않습니다. ```./gradlew run```으로 어플리케이션 실행 후 http://localhost:8080/swagger-ui.html 으로 접속하여 어플리케이션을 실행할 수 있습니다.
+- 별도의 설치는 필요하지 않습니다. ```./gradlew bootrun```으로 어플리케이션 실행 후 http://localhost:8080/swagger-ui.html 으로 접속하여 어플리케이션을 테스트할 수
+  있습니다.
+- POSTMAN 같은 툴로 API 테스트도 가능합니다.
 
 ## 기타
 
