@@ -9,7 +9,7 @@ public interface UserRepository {
 
     User save(User user);
 
-    void update(User user);
+    void updatePassword(Long userId, String user);
 
     Optional<User> findById(Id<User, Long> userId);
 

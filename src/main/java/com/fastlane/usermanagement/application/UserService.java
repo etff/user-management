@@ -24,12 +24,21 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public UserResponseDto getUser(Long userId) {
-        final User user = userRepository.findById(Id.of(User.class, userId))
-                .orElseThrow(UserNotFoundException::new);
+        final User user = findUser(userId);
         return new UserResponseDto(user);
     }
 
     public void deleteUser(Long userId) {
         userRepository.deleteById(userId);
+    }
+
+    public void updatePassword(Long userId, String password) {
+        findUser(userId);
+        userRepository.updatePassword(userId, password);
+    }
+
+    private User findUser(Long userId) {
+        return userRepository.findById(Id.of(User.class, userId))
+                .orElseThrow(UserNotFoundException::new);
     }
 }

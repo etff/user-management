@@ -17,6 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -78,5 +79,26 @@ class UserServiceTest {
         userService.deleteUser(anyLong());
 
         verify(userRepository).deleteById(anyLong());
+    }
+
+    @Test
+    void updateExistUserPassword() {
+        // given
+        given(userRepository.findById(Id.of(User.class, GIVEN_USER_ID)))
+                .willReturn(Optional.of(user));
+
+        // when
+        userService.updatePassword(GIVEN_USER_ID, anyString());
+
+        // then
+        verify(userRepository).updatePassword(anyLong(), anyString());
+    }
+
+    @Test
+    void updateNotExistUserPassword() {
+        // when
+        assertThatThrownBy(() -> {
+            userService.updatePassword(GIVEN_USER_ID, anyString());
+        }).isInstanceOf(UserNotFoundException.class);
     }
 }

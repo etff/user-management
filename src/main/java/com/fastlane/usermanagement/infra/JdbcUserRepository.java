@@ -37,8 +37,8 @@ public class JdbcUserRepository implements UserRepository {
     }
 
     @Override
-    public void update(User user) {
-
+    public void updatePassword(Long userId, String password) {
+        jdbcTemplate.update("UPDATE users SET password=? WHERE id=?", password, userId);
     }
 
     @Override
